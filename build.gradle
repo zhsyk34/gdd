@@ -1,0 +1,59 @@
+group 'com.cat'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'idea'
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'war'
+apply plugin: 'jetty'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+//    mavenCentral()
+//    maven {
+//        url("https://plugins.gradle.org/m2/")
+//    }
+
+    maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+}
+
+dependencies {
+    compile 'org.springframework:spring-webmvc:4.2.5.RELEASE'
+    compile 'org.springframework:spring-test:4.2.5.RELEASE'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+
+jettyRun {
+    contextPath = "gdd"
+    httpPort = 8080
+}
+
+jettyRunWar {
+    contextPath = "gdd"
+    httpPort = 8080
+}
+
+task copyJars(type: Copy) {
+    from configurations.compile
+    into 'src/main/webapp/WEB-INF/lib' // 目标位置
+}
+
+//task copyJars(type: Copy) {
+//    from configurations.runtime
+//    into 'lib' // 目标位置
+//}
+
+uploadArchives {
+    repositories {
+//        flatDir {
+//            dirs 'repos'
+//        }
+        mavenDeployer {
+            repository(url: "file://E:/")
+        }
+    }
+}
